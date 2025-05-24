@@ -1,18 +1,18 @@
-# bolt.diy
+# bitai agent
 
-[![bolt.diy: AI-Powered Full-Stack Web Development in the Browser](./public/social_preview_index.jpg)](https://bolt.diy)
+[![bitai agent: AI-Powered Full-Stack Web Development in the Browser](./public/social_preview_index.jpg)](https://bitai.agent)
 
-Welcome to bolt.diy, the official open source version of Bolt.new, which allows you to choose the LLM that you use for each prompt! Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, or Groq models - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
-
------
-Check the [bolt.diy Docs](https://stackblitz-labs.github.io/bolt.diy/) for more offical installation instructions and more informations.
+Welcome to bitai agent, the official open source version of BitAI, which allows you to choose the LLM that you use for each prompt! Currently, you can use OpenAI, Anthropic, Ollama, OpenRouter, Gemini, LMStudio, Mistral, xAI, HuggingFace, DeepSeek, or Groq models - and it is easily extended to use any other model supported by the Vercel AI SDK! See the instructions below for running this locally and extending it to include more models.
 
 -----
-Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying bolt.diy yourself!
+Check the [bitai agent Docs](https://stackblitz-labs.github.io/bitai.agent/) for more official installation instructions and more information.
 
-We have also launched an experimental agent called the "bolt.diy Expert" that can answer common questions about bolt.diy. Find it here on the [oTTomator Live Agent Studio](https://studio.ottomator.ai/).
+-----
+Also [this pinned post in our community](https://thinktank.ottomator.ai/t/videos-tutorial-helpful-content/3243) has a bunch of incredible resources for running and deploying bitai agent yourself!
 
-bolt.diy was originally started by [Cole Medin](https://www.youtube.com/@ColeMedin) but has quickly grown into a massive community effort to build the BEST open source AI coding assistant!
+We have also launched an experimental agent called the "bitai agent Expert" that can answer common questions about bitai agent. Find it here on the [oTTomator Live Agent Studio](https://studio.ottomator.ai/).
+
+bitai agent was originally started by [Cole Medin](https://www.youtube.com/@ColeMedin) but has quickly grown into a massive community effort to build the BEST open source AI coding assistant!
 
 ## Table of Contents
 
@@ -28,11 +28,11 @@ bolt.diy was originally started by [Cole Medin](https://www.youtube.com/@ColeMed
 
 ## Join the community
 
-[Join the bolt.diy community here, in the oTTomator Think Tank!](https://thinktank.ottomator.ai)
+[Join the bitai agent community here, in the oTTomator Think Tank!](https://thinktank.ottomator.ai)
 
 ## Project management
 
-Bolt.diy is a community effort! Still, the core team of contributors aims at organizing the project in way that allows
+bitai agent is a community effort! Still, the core team of contributors aims at organizing the project in way that allows
 you to understand where the current areas of focus are.
 
 If you want to know what we are working on, what we are planning to work on, or if you want to contribute to the

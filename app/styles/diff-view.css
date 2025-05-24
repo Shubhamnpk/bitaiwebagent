@@ -1,6 +1,14 @@
 .diff-panel-content {
+  background: var(--bolt-elements-bg-depth-1, #fff);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.07);
+  padding: 1.5rem 0.5rem;
+  margin: 1rem 0;
+  transition:
+    background 0.3s,
+    color 0.3s;
+  color: var(--bolt-elements-textPrimary, #222);
   scrollbar-width: thin;
-  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
 }
 
 .diff-panel-content::-webkit-scrollbar {
@@ -33,40 +41,127 @@
 
 /* Estilos para as linhas de diff */
 .diff-block-added {
-  @apply bg-green-500/20 border-l-4 border-green-500;
+  background: rgba(34, 197, 94, 0.1);
+  border-left: 4px solid #22c55e;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
 .diff-block-removed {
-  @apply bg-red-500/20 border-l-4 border-red-500;
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #ef4444;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
 /* Melhorar contraste para mudanças */
 .diff-panel-content .group:hover .diff-block-added {
-  @apply bg-green-500/30;
+  background: rgba(34, 197, 94, 0.18);
 }
 
 .diff-panel-content .group:hover .diff-block-removed {
-  @apply bg-red-500/30;
+  background: rgba(239, 68, 68, 0.18);
 }
 
 /* Estilos unificados para ambas as visualizações */
 .diff-line {
-  @apply flex group min-w-fit transition-colors duration-150;
+  display: flex;
+  min-width: max-content;
+  align-items: flex-start;
+  transition: background 0.15s;
+  border-radius: 6px;
+  margin-bottom: 2px;
 }
 
 .diff-line-number {
-  @apply w-12 shrink-0 pl-2 py-0.5 text-left font-mono text-bolt-elements-textTertiary border-r border-bolt-elements-borderColor bg-bolt-elements-background-depth-1;
+  width: 2.5rem;
+  flex-shrink: 0;
+  padding-left: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  text-align: right;
+  font-family: 'JetBrains Mono', 'Fira Mono', 'Menlo', 'monospace';
+  font-size: 0.95em;
+  color: var(--bolt-elements-textTertiary);
+  border-right: 1px solid var(--bolt-elements-borderColor);
+  background: var(--bolt-elements-background-depth-2);
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 6px 0 0 6px;
 }
 
 .diff-line-content {
-  @apply px-4 py-0.5 font-mono whitespace-pre flex-1 group-hover:bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-family: 'JetBrains Mono', 'Fira Mono', 'Menlo', 'monospace';
+  font-size: 1em;
+  white-space: pre-wrap;
+  flex: 1 1 0%;
+  color: var(--bolt-elements-textPrimary);
+  background: transparent;
+  border-radius: 0 6px 6px 0;
+  word-break: break-word;
+  transition:
+    color 0.2s,
+    background 0.2s;
 }
 
 /* Cores específicas para adições/remoções */
 .diff-added {
-  @apply bg-green-500/20 border-l-4 border-green-500;
+  background: rgba(34, 197, 94, 0.1);
+  border-left: 4px solid #22c55e;
+  border-radius: 6px;
 }
 
 .diff-removed {
-  @apply bg-red-500/20 border-l-4 border-red-500;
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #ef4444;
+  border-radius: 6px;
+}
+
+/* Highlight for changed words/characters */
+.diff-line-content .text-green-700,
+.diff-line-content .text-green-500 {
+  background: rgba(34, 197, 94, 0.18);
+  color: #15803d !important;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+.diff-line-content .text-red-700,
+.diff-line-content .text-red-500 {
+  background: rgba(239, 68, 68, 0.18);
+  color: #b91c1c !important;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* Header styles for diff view */
+.diff-panel-content .diff-header,
+.diff-panel-content .diff-header-info,
+.diff-panel-content .diff-header-title {
+  background: var(--bolt-elements-background-depth-2, #f5f5f5);
+  color: var(--bolt-elements-textPrimary, #222);
+  font-weight: 600;
+  border-radius: 10px 10px 0 0;
+  padding: 0.75rem 1.2rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.04);
+}
+
+/* Responsive improvements */
+@media (max-width: 700px) {
+  .diff-panel-content {
+    padding: 0.5rem 0.1rem;
+  }
+  .diff-line-content {
+    font-size: 0.92em;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .diff-line-number {
+    width: 1.5rem;
+    font-size: 0.85em;
+  }
 }

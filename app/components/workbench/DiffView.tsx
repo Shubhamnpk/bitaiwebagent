@@ -40,7 +40,7 @@ interface FullscreenButtonProps {
 const FullscreenButton = memo(({ onClick, isFullscreen }: FullscreenButtonProps) => (
   <button
     onClick={onClick}
-    className="ml-4 p-1 rounded hover:bg-bolt-elements-background-depth-3 text-bolt-elements-textTertiary hover:text-bolt-elements-textPrimary transition-colors"
+    className="ml-4 p-1 rounded hover:bg-bitai-elements-background-depth-3 text-bitai-elements-textTertiary hover:text-bitai-elements-textPrimary transition-colors"
     title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
   >
     <div className={isFullscreen ? 'i-ph:corners-in' : 'i-ph:corners-out'} />
@@ -54,7 +54,7 @@ const FullscreenOverlay = memo(({ isFullscreen, children }: { isFullscreen: bool
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-6">
-      <div className="w-full h-full max-w-[90vw] max-h-[90vh] bg-bolt-elements-background-depth-2 rounded-lg border border-bolt-elements-borderColor shadow-xl overflow-hidden">
+      <div className="w-full h-full max-w-[90vw] max-h-[90vh] bg-bitai-elements-background-depth-2 rounded-lg border border-bitai-elements-borderColor shadow-xl overflow-hidden">
         {children}
       </div>
     </div>
@@ -313,10 +313,9 @@ const processChanges = (beforeCode: string, afterCode: string) => {
 };
 
 const lineNumberStyles =
-  'w-9 shrink-0 pl-2 py-1 text-left font-mono text-bolt-elements-textTertiary border-r border-bolt-elements-borderColor bg-bolt-elements-background-depth-1';
+  'w-9 shrink-0 pl-2 py-1 text-left font-mono text-bitai-elements-textTertiary border-r border-bitai-elements-borderColor bg-bitai-elements-background-depth-1';
 const lineContentStyles =
-  'px-1 py-1 font-mono whitespace-pre flex-1 group-hover:bg-bolt-elements-background-depth-2 text-bolt-elements-textPrimary';
-const diffPanelStyles = 'h-full overflow-auto diff-panel-content';
+  'px-1 py-1 font-mono whitespace-pre flex-1 group-hover:bg-bitai-elements-background-depth-2 text-bitai-elements-textPrimary';
 
 // Updated color styles for better consistency
 const diffLineStyles = {
@@ -328,14 +327,14 @@ const diffLineStyles = {
 const changeColorStyles = {
   added: 'text-green-700 dark:text-green-500 bg-green-500/10 dark:bg-green-500/20',
   removed: 'text-red-700 dark:text-red-500 bg-red-500/10 dark:bg-red-500/20',
-  unchanged: 'text-bolt-elements-textPrimary',
+  unchanged: 'text-bitai-elements-textPrimary',
 };
 
 const renderContentWarning = (type: 'binary' | 'error') => (
   <div className="h-full flex items-center justify-center p-4">
-    <div className="text-center text-bolt-elements-textTertiary">
+    <div className="text-center text-bitai-elements-textTertiary">
       <div className={`i-ph:${type === 'binary' ? 'file-x' : 'warning-circle'} text-4xl text-red-400 mb-2 mx-auto`} />
-      <p className="font-medium text-bolt-elements-textPrimary">
+      <p className="font-medium text-bitai-elements-textPrimary">
         {type === 'binary' ? 'Binary file detected' : 'Error processing file'}
       </p>
       <p className="text-sm mt-1">
@@ -343,56 +342,6 @@ const renderContentWarning = (type: 'binary' | 'error') => (
       </p>
     </div>
   </div>
-);
-
-const NoChangesView = memo(
-  ({
-    beforeCode,
-    language,
-    highlighter,
-    theme,
-  }: {
-    beforeCode: string;
-    language: string;
-    highlighter: any;
-    theme: string;
-  }) => (
-    <div className="h-full flex flex-col items-center justify-center p-4">
-      <div className="text-center text-bolt-elements-textTertiary">
-        <div className="i-ph:files text-4xl text-green-400 mb-2 mx-auto" />
-        <p className="font-medium text-bolt-elements-textPrimary">Files are identical</p>
-        <p className="text-sm mt-1">Both versions match exactly</p>
-      </div>
-      <div className="mt-4 w-full max-w-2xl bg-bolt-elements-background-depth-1 rounded-lg border border-bolt-elements-borderColor overflow-hidden">
-        <div className="p-2 text-xs font-bold text-bolt-elements-textTertiary border-b border-bolt-elements-borderColor">
-          Current Content
-        </div>
-        <div className="overflow-auto max-h-96">
-          {beforeCode.split('\n').map((line, index) => (
-            <div key={index} className="flex group min-w-fit">
-              <div className={lineNumberStyles}>{index + 1}</div>
-              <div className={lineContentStyles}>
-                <span className="mr-2"> </span>
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: highlighter
-                      ? highlighter
-                          .codeToHtml(line, {
-                            lang: language,
-                            theme: theme === 'dark' ? 'github-dark' : 'github-light',
-                          })
-                          .replace(/<\/?pre[^>]*>/g, '')
-                          .replace(/<\/?code[^>]*>/g, '')
-                      : line,
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  ),
 );
 
 // Otimização do processamento de diferenças com memoização
@@ -425,7 +374,7 @@ const CodeLine = memo(
       if (type === 'unchanged' || !block.charChanges) {
         const highlightedCode = highlighter
           ? highlighter
-              .codeToHtml(content, { lang: language, theme: theme === 'dark' ? 'github-dark' : 'github-light' })
+              .codeToHtml(content, { lang: language, theme: getShikiTheme(theme) })
               .replace(/<\/?pre[^>]*>/g, '')
               .replace(/<\/?code[^>]*>/g, '')
           : content;
@@ -441,7 +390,7 @@ const CodeLine = memo(
               ? highlighter
                   .codeToHtml(change.value, {
                     lang: language,
-                    theme: theme === 'dark' ? 'github-dark' : 'github-light',
+                    theme: getShikiTheme(theme),
                   })
                   .replace(/<\/?pre[^>]*>/g, '')
                   .replace(/<\/?code[^>]*>/g, '')
@@ -517,7 +466,7 @@ const FileInfo = memo(
     const showStats = additions > 0 || deletions > 0;
 
     return (
-      <div className="flex items-center bg-bolt-elements-background-depth-1 p-2 text-sm text-bolt-elements-textPrimary shrink-0">
+      <div className="flex items-center bg-bitai-elements-background-depth-1 p-2 text-sm text-bitai-elements-textPrimary shrink-0">
         <div className="i-ph:file mr-2 h-4 w-4 shrink-0" />
         <span className="truncate">{filename}</span>
         <span className="ml-auto shrink-0 flex items-center gap-2">
@@ -542,81 +491,85 @@ const FileInfo = memo(
   },
 );
 
-const InlineDiffComparison = memo(({ beforeCode, afterCode, filename, language }: CodeComparisonProps) => {
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const [highlighter, setHighlighter] = useState<any>(null);
-  const theme = useStore(themeStore);
+const InlineDiffComparison = memo(
+  ({ beforeCode, afterCode, filename, language, theme }: CodeComparisonProps & { theme: string }) => {
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [highlighter, setHighlighter] = useState<any>(null);
 
-  const toggleFullscreen = useCallback(() => {
-    setIsFullscreen((prev) => !prev);
-  }, []);
+    const toggleFullscreen = useCallback(() => {
+      setIsFullscreen((prev) => !prev);
+    }, []);
 
-  const { unifiedBlocks, hasChanges, isBinary, error } = useProcessChanges(beforeCode, afterCode);
+    const { unifiedBlocks, hasChanges, isBinary, error } = useProcessChanges(beforeCode, afterCode);
 
-  useEffect(() => {
-    getHighlighter({
-      themes: ['github-dark', 'github-light'],
-      langs: [
-        'typescript',
-        'javascript',
-        'json',
-        'html',
-        'css',
-        'jsx',
-        'tsx',
-        'python',
-        'php',
-        'java',
-        'c',
-        'cpp',
-        'csharp',
-        'go',
-        'ruby',
-        'rust',
-        'plaintext',
-      ],
-    }).then(setHighlighter);
-  }, []);
+    useEffect(() => {
+      getHighlighter({
+        themes: [
+          'github-dark',
+          'github-light',
+          'solarized-light',
+          'dracula',
+          'min-light',
+          'nord',
+          'gruvbox-light',
+          'monokai',
+        ],
+        langs: [
+          'typescript',
+          'javascript',
+          'json',
+          'html',
+          'css',
+          'jsx',
+          'tsx',
+          'python',
+          'php',
+          'java',
+          'c',
+          'cpp',
+          'csharp',
+          'go',
+          'ruby',
+          'rust',
+          'plaintext',
+        ],
+      }).then(setHighlighter);
+    }, []);
 
-  if (isBinary || error) {
-    return renderContentWarning(isBinary ? 'binary' : 'error');
-  }
+    if (isBinary || error) {
+      return renderContentWarning(isBinary ? 'binary' : 'error');
+    }
 
-  return (
-    <FullscreenOverlay isFullscreen={isFullscreen}>
-      <div className="w-full h-full flex flex-col">
-        <FileInfo
-          filename={filename}
-          hasChanges={hasChanges}
-          onToggleFullscreen={toggleFullscreen}
-          isFullscreen={isFullscreen}
-          beforeCode={beforeCode}
-          afterCode={afterCode}
-        />
-        <div className={diffPanelStyles}>
-          {hasChanges ? (
-            <div className="overflow-x-auto min-w-full">
-              {unifiedBlocks.map((block, index) => (
-                <CodeLine
-                  key={`${block.lineNumber}-${index}`}
-                  lineNumber={block.lineNumber}
-                  content={block.content}
-                  type={block.type}
-                  highlighter={highlighter}
-                  language={language}
-                  block={block}
-                  theme={theme}
-                />
-              ))}
-            </div>
-          ) : (
-            <NoChangesView beforeCode={beforeCode} language={language} highlighter={highlighter} theme={theme} />
-          )}
+    return (
+      <FullscreenOverlay isFullscreen={isFullscreen}>
+        <div className="w-full h-full flex flex-col">
+          <FileInfo
+            filename={filename}
+            hasChanges={hasChanges}
+            onToggleFullscreen={toggleFullscreen}
+            isFullscreen={isFullscreen}
+            beforeCode={beforeCode}
+            afterCode={afterCode}
+          />
+          <div className="flex-1 overflow-auto diff-panel-content">
+            {unifiedBlocks.map((block, idx) => (
+              <CodeLine
+                key={idx}
+                lineNumber={block.lineNumber}
+                content={block.content}
+                type={block.type}
+                highlighter={highlighter}
+                language={language}
+                block={block}
+                theme={theme}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </FullscreenOverlay>
-  );
-});
+      </FullscreenOverlay>
+    );
+  },
+);
 
 interface DiffViewProps {
   fileHistory: Record<string, FileHistory>;
@@ -738,6 +691,7 @@ export const DiffView = memo(({ fileHistory, setFileHistory }: DiffViewProps) =>
           filename={selectedFile}
           lightTheme="github-light"
           darkTheme="github-dark"
+          theme={useStore(themeStore)}
         />
       </div>
     );
@@ -753,3 +707,27 @@ export const DiffView = memo(({ fileHistory, setFileHistory }: DiffViewProps) =>
     );
   }
 });
+
+// Map app theme to shiki theme
+function getShikiTheme(theme: string): string {
+  switch (theme) {
+    case 'dark':
+      return 'github-dark';
+    case 'light':
+      return 'github-light';
+    case 'solarized':
+      return 'solarized-light';
+    case 'dracula':
+      return 'dracula';
+    case 'high-contrast':
+      return 'min-light';
+    case 'nord':
+      return 'nord';
+    case 'gruvbox':
+      return 'gruvbox-light';
+    case 'monokai':
+      return 'monokai';
+    default:
+      return 'github-light';
+  }
+}

@@ -1,10 +1,11 @@
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { Terminal as XTerm } from '@xterm/xterm';
-import { forwardRef, memo, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, memo, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import type { Theme } from '~/lib/stores/theme';
 import { createScopedLogger } from '~/utils/logger';
 import { getTerminalTheme } from './theme';
+import '~/styles/components/terminal-copy.css';
 
 const logger = createScopedLogger('Terminal');
 
@@ -26,6 +27,7 @@ export const Terminal = memo(
     ({ className, theme, readonly, id, onTerminalReady, onTerminalResize }, ref) => {
       const terminalElementRef = useRef<HTMLDivElement>(null);
       const terminalRef = useRef<XTerm>();
+      const [copied, setCopied] = useState(false);
 
       useEffect(() => {
         const element = terminalElementRef.current!;
@@ -83,7 +85,37 @@ export const Terminal = memo(
         };
       }, []);
 
-      return <div className={className} ref={terminalElementRef} />;
+      function copyTerminalContent() {
+        const terminal = terminalRef.current;
+
+        if (!terminal) {
+          return;
+        }
+
+        // Get all lines from the terminal buffer
+        const lines = [];
+
+        for (let i = 0; i < terminal.buffer.active.length; i++) {
+          const line = terminal.buffer.active.getLine(i);
+
+          if (line) {
+            lines.push(line.translateToString(true));
+          }
+        }
+
+        const text = lines.join('\n');
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+      }
+
+      return (
+        <div className={`terminal-copy-wrapper ${className ?? ''}`} ref={terminalElementRef}>
+          <button className="terminal-copy-btn" onClick={copyTerminalContent} title="Copy terminal contents">
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+      );
     },
   ),
 );

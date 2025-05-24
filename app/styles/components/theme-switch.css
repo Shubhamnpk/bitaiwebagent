@@ -1,0 +1,12 @@
+.theme-switch-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.theme-switch-select select {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--bolt-elements-bg-depth-2);
+  color: var(--bolt-elements-textPrimary);
+  border: 1px solid var(--bolt-elements-borderColor);
+}

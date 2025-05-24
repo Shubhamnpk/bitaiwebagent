@@ -1,0 +1,21 @@
+.terminal-copy-wrapper {
+  position: relative;
+}
+.terminal-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  background: var(--bolt-elements-bg-depth-2);
+  color: var(--bolt-elements-textPrimary);
+  border: 1px solid var(--bolt-elements-borderColor);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.terminal-copy-btn:hover {
+  opacity: 1;
+}

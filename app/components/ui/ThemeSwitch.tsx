@@ -1,7 +1,7 @@
+import '~/styles/components/theme-switch.css';
 import { useStore } from '@nanostores/react';
 import { memo, useEffect, useState } from 'react';
-import { themeStore, toggleTheme } from '~/lib/stores/theme';
-import { IconButton } from './IconButton';
+import { themeStore, THEME_OPTIONS, setTheme } from '~/lib/stores/theme';
 
 interface ThemeSwitchProps {
   className?: string;
@@ -17,13 +17,15 @@ export const ThemeSwitch = memo(({ className }: ThemeSwitchProps) => {
 
   return (
     domLoaded && (
-      <IconButton
-        className={className}
-        icon={theme === 'dark' ? 'i-ph-sun-dim-duotone' : 'i-ph-moon-stars-duotone'}
-        size="xl"
-        title="Toggle Theme"
-        onClick={toggleTheme}
-      />
+      <div className={`theme-switch-select ${className ?? ''}`}>
+        <select value={theme} onChange={(e) => setTheme(e.target.value as any)} title="Select Theme">
+          {THEME_OPTIONS.map((opt: string) => (
+            <option key={opt} value={opt}>
+              {opt.charAt(0).toUpperCase() + opt.slice(1).replace('-', ' ')}
+            </option>
+          ))}
+        </select>
+      </div>
     )
   );
 });
