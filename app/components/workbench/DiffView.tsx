@@ -3,14 +3,14 @@ import { useStore } from '@nanostores/react';
 import { workbenchStore } from '~/lib/stores/workbench';
 import type { FileMap } from '~/lib/stores/files';
 import type { EditorDocument } from '~/components/editor/codemirror/CodeMirrorEditor';
-import { diffLines, type Change } from 'diff';
+import { diffLines, type Change } from 'diff'; // Change type is used in the code
 import { getHighlighter } from 'shiki';
 import '~/styles/diff-view.css';
 import { diffFiles, extractRelativePath } from '~/utils/diff';
-import { ActionRunner } from '~/lib/runtime/action-runner';
 import type { FileHistory } from '~/types/actions';
 import { getLanguageFromExtension } from '~/utils/getLanguageFromExtension';
 import { themeStore } from '~/lib/stores/theme';
+import type { ActionRunner } from '~/lib/runtime/action-runner';
 
 interface CodeComparisonProps {
   beforeCode: string;
@@ -345,8 +345,38 @@ const renderContentWarning = (type: 'binary' | 'error') => (
 );
 
 // Otimização do processamento de diferenças com memoização
-const useProcessChanges = (beforeCode: string, afterCode: string) => {
-  return useMemo(() => processChanges(beforeCode, afterCode), [beforeCode, afterCode]);
+const useProcessChanges = (
+  beforeCode: string,
+  afterCode: string,
+): {
+  unifiedBlocks: DiffBlock[];
+  hasChanges: boolean;
+  isBinary: boolean;
+  error?: boolean;
+  beforeLines?: string[];
+  afterLines?: string[];
+  lineChanges?: { before: Set<number>; after: Set<number> };
+} => {
+  // Ensure correct Set<number> typing for lineChanges
+  const result = useMemo(() => processChanges(beforeCode, afterCode), [beforeCode, afterCode]);
+
+  if (result.lineChanges) {
+    // Convert to Set<number> if needed
+    result.lineChanges = {
+      before: new Set(Array.from(result.lineChanges.before).map(Number)),
+      after: new Set(Array.from(result.lineChanges.after).map(Number)),
+    };
+  }
+
+  return result as {
+    unifiedBlocks: DiffBlock[];
+    hasChanges: boolean;
+    isBinary: boolean;
+    error?: boolean;
+    beforeLines?: string[];
+    afterLines?: string[];
+    lineChanges?: { before: Set<number>; after: Set<number> };
+  };
 };
 
 // Componente otimizado para renderização de linhas de código
@@ -418,7 +448,7 @@ const CodeLine = memo(
   },
 );
 
-// Componente para exibir informações sobre o arquivo
+// Component to display file information
 const FileInfo = memo(
   ({
     filename,
@@ -491,6 +521,8 @@ const FileInfo = memo(
   },
 );
 
+FileInfo.displayName = 'FileInfo';
+
 const InlineDiffComparison = memo(
   ({ beforeCode, afterCode, filename, language, theme }: CodeComparisonProps & { theme: string }) => {
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -552,7 +584,7 @@ const InlineDiffComparison = memo(
             afterCode={afterCode}
           />
           <div className="flex-1 overflow-auto diff-panel-content">
-            {unifiedBlocks.map((block, idx) => (
+            {unifiedBlocks.map((block: DiffBlock, idx: number) => (
               <CodeLine
                 key={idx}
                 lineNumber={block.lineNumber}
@@ -574,10 +606,10 @@ const InlineDiffComparison = memo(
 interface DiffViewProps {
   fileHistory: Record<string, FileHistory>;
   setFileHistory: React.Dispatch<React.SetStateAction<Record<string, FileHistory>>>;
-  actionRunner: ActionRunner;
+  _actionRunner: ActionRunner;
 }
 
-export const DiffView = memo(({ fileHistory, setFileHistory }: DiffViewProps) => {
+const DiffViewComponent = ({ fileHistory, setFileHistory, _actionRunner }: DiffViewProps) => {
   const files = useStore(workbenchStore.files) as FileMap;
   const selectedFile = useStore(workbenchStore.selectedFile);
   const currentDocument = useStore(workbenchStore.currentDocument) as EditorDocument;
@@ -706,7 +738,11 @@ export const DiffView = memo(({ fileHistory, setFileHistory }: DiffViewProps) =>
       </div>
     );
   }
-});
+};
+
+DiffViewComponent.displayName = 'DiffView';
+
+export const DiffView = memo(DiffViewComponent);
 
 // Map app theme to shiki theme
 function getShikiTheme(theme: string): string {
